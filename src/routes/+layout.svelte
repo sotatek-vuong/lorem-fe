@@ -7,16 +7,23 @@
 	import '@skeletonlabs/skeleton/styles/skeleton.css';
 	import '../app.postcss';
 
-	import { AppShell } from '@skeletonlabs/skeleton';
+	import { AppShell, Modal } from '@skeletonlabs/skeleton';
 	import Header from '../components/header.svelte';
+	import Login from '../components/login.svelte';
 </script>
 
 <AppShell>
-	<svelte:fragment slot="header"><Header /></svelte:fragment>
+	<svelte:fragment slot="header">
+		<Header />
+	</svelte:fragment>
 
-	<slot />
+	<div class="container mx-auto px-4">
+		<slot />
+	</div>
+
 	<svelte:fragment slot="pageFooter">
 		<hr />
-		Page Footer
+		Footer
 	</svelte:fragment>
+	<Modal components={{ login: { ref: Login } }} />
 </AppShell>

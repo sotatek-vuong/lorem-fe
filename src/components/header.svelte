@@ -1,9 +1,29 @@
-<nav class="border-b border-surface-500">
-	<div class="md:container md:mx-auto px-4 py-2 flex items-center gap-2">
-		<a href="/" class="h2 text-primary-500 text">Logo</a>
-		<div class="flex-1" />
+<script>
+	import { AppBar, modalStore } from '@skeletonlabs/skeleton';
 
-		<button type="button" class="btn hover:variant-soft-surface">Login</button>
-		<button type="button" class="btn variant-filled-primary">Register</button>
-	</div>
-</nav>
+	const onLogin = () => {
+		modalStore.trigger({
+			type: 'component',
+			component: 'login'
+		});
+	};
+</script>
+
+<AppBar
+	background="bg-surface-900"
+	border="border-b border-surface-500"
+	padding="p-0"
+	regionRowMain="container mx-auto p-4"
+	slotTrail="flex-wrap"
+>
+	<svelte:fragment slot="lead">
+		<a href="/" class="h2 text-primary-500 font-medium">Lorem</a>
+	</svelte:fragment>
+
+	<svelte:fragment slot="trail">
+		<button type="button" class="btn btn-sm hover:variant-soft-surface" on:click={onLogin}
+			>Login</button
+		>
+		<button type="button" class="btn btn-sm variant-filled-primary">Register</button>
+	</svelte:fragment>
+</AppBar>
