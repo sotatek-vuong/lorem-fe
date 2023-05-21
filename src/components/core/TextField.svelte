@@ -5,6 +5,7 @@
 	export let label: string = '';
 	export let required: boolean = false;
 	export let type = 'text';
+	export let error: boolean = false;
 
 	const showToggle = type === 'password';
 
@@ -23,8 +24,8 @@
 		</span>
 	{/if}
 
-	<div class="input-group flex items-center">
-		<input class="flex-grow flex-shrink-0" bind:value {...$$props} {...{ type }} />
+	<div class="input-group flex items-center{error ? ' border-error-500' : ''}">
+		<input class="flex-grow flex-shrink-0" bind:value {...$$restProps} {...{ type }} />
 		{#if showToggle}
 			<button type="button" class="btn-icon hover:variant-soft-surface" on:click={onToggle}>
 				{@html type === 'password' ? ShowPw : HidePw}

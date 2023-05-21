@@ -10,7 +10,7 @@
 	import { AppShell, Modal } from '@skeletonlabs/skeleton';
 	import Header from '@/components/modules/header.svelte';
 	import Login from '@/components/modules/login.svelte';
-	import Register from '@/components/modules/register.svelte';
+	import Register from '@/components/modules/register/index.svelte';
 </script>
 
 <AppShell>
