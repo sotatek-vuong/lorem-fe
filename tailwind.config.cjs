@@ -8,7 +8,33 @@ module.exports = {
 		require('path').join(require.resolve('@skeletonlabs/skeleton'), '../**/*.{html,js,svelte,ts}')
 	],
 	theme: {
-		extend: {}
+		extend: {
+			fontSize: {
+				base: ['0.875rem', '1.25']
+			},
+			spacing: { 1: '8px' },
+			colors: {
+				status: {
+					red: '#da4545',
+					green: '#10a342'
+				},
+				border: {
+					1: '#383c43',
+					2: '#808287'
+				},
+				bg: {
+					1: '#151515',
+					2: '#202020',
+					3: '#282828'
+				},
+				content: {
+					1: '#ffffff',
+					2: '#999999',
+					3: '#4f4f4f'
+				},
+				icon: '#888888'
+			}
+		}
 	},
 	plugins: [
 		require('@tailwindcss/forms'),

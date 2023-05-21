@@ -8,8 +8,9 @@
 	import '../app.postcss';
 
 	import { AppShell, Modal } from '@skeletonlabs/skeleton';
-	import Header from '../components/header.svelte';
-	import Login from '../components/login.svelte';
+	import Header from '@/components/modules/header.svelte';
+	import Login from '@/components/modules/login.svelte';
+	import Register from '@/components/modules/register.svelte';
 </script>
 
 <AppShell>
@@ -25,5 +26,5 @@
 		<hr />
 		Footer
 	</svelte:fragment>
-	<Modal components={{ login: { ref: Login } }} />
+	<Modal components={{ login: { ref: Login }, register: { ref: Register } }} />
 </AppShell>

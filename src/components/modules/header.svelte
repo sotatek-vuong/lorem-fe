@@ -7,6 +7,13 @@
 			component: 'login'
 		});
 	};
+
+	const onRegister = () => {
+		modalStore.trigger({
+			type: 'component',
+			component: 'register'
+		});
+	};
 </script>
 
 <AppBar
@@ -24,6 +31,8 @@
 		<button type="button" class="btn btn-sm hover:variant-soft-surface" on:click={onLogin}
 			>Login</button
 		>
-		<button type="button" class="btn btn-sm variant-filled-primary">Register</button>
+		<button type="button" class="btn btn-sm variant-filled-primary" on:click={onRegister}
+			>Register</button
+		>
 	</svelte:fragment>
 </AppBar>
