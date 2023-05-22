@@ -19,6 +19,6 @@
 
 {#if modalStore}
 	<div class="card flex-col p-10 gap-4 w-modal">
-		<div id="auth_google" />
+		<div id="auth_google" class="h-11" />
 	</div>
 {/if}

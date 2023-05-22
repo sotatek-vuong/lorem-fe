@@ -1,42 +1,63 @@
 <script lang="ts">
 	export const parent = {};
+	import { z } from 'zod';
 
 	// Stores
+	import GoogleIcon from 'src/assets/icons/google.svg?raw';
+	import FacebookIcon from 'src/assets/icons/facebook.svg?raw';
+	import GithubIcon from 'src/assets/icons/github.svg?raw';
 	import { modalStore } from '@skeletonlabs/skeleton';
+	import { createForm } from 'felte';
+	import { validator } from '@felte/validator-zod';
+	import TextField from '../core/TextField.svelte';
 
-	const formData = {
-		account: '',
-		password: '',
-		rememberMe: true
-	};
+	const schema = z.object({
+		username: z
+			.string()
+			.min(3, 'Minimum character length is 3')
+			.max(30, 'Maximum character length is 30')
+			.regex(/^[a-zA-Z0-9]*$/g, 'Only numbers and letters')
+			.or(z.string().email('Email is invalid format. Please check again.')),
+		password: z.string().min(8, 'Minimum character length is 8'),
+	});
+
+	const { form, errors } = createForm<z.infer<typeof schema>>({
+		extend: [validator({ schema, level: 'error' })],
+		onSubmit: (data) => {
+			console.log(data);
+		},
+	});
 
 	const onRegister = () => {
 		modalStore.close();
 		modalStore.trigger({ type: 'component', component: 'register' });
 	};
-
-	const onSubmit = () => {
-		console.log(formData);
-	};
 </script>
 
 {#if modalStore}
 	<div class="card flex-col p-10 w-modal">
-		<h2 class="h2 mb-6 font-bold">Login</h2>
-		<form on:submit={onSubmit} class="flex flex-col gap-6">
-			<label class="label">
-				<span>Email or Username <span class="text-error-500">*</span></span>
-				<input tabindex="0" class="input" type="text" bind:value={formData.account} />
-			</label>
-			<label class="label" aria-required="true">
-				<span>Password <span class="text-error-500">*</span></span>
-				<input tabindex="0" class="input" type="password" bind:value={formData.password} />
-			</label>
+		<h2 class="h2 mb-4 font-bold text-center">Login</h2>
+		<form use:form novalidate class="flex flex-col gap-4">
+			<TextField
+				label="Email or Username"
+				required
+				name="username"
+				error={$errors.username !== null}
+			>
+				<svelte:fragment slot="helpertext">
+					{#if $errors.username}
+						<p class="text-error-500">{$errors.username[0]}</p>
+					{/if}
+				</svelte:fragment>
+			</TextField>
 
-			<label class="flex items-center self-start space-x-2">
-				<input tabindex="0" class="checkbox" type="checkbox" bind:checked={formData.rememberMe} />
-				<p>Remember Me</p>
-			</label>
+			<TextField label="Password" required name="password" error={$errors.password !== null}>
+				<svelte:fragment slot="helpertext">
+					{#if $errors.password}
+						<p class="text-error-500">{$errors.password[0]}</p>
+					{/if}
+				</svelte:fragment>
+			</TextField>
 
 			<div
 				tabindex="0"
@@ -47,6 +68,24 @@
 			</div>
 
 			<button tabindex="0" type="submit" class="btn variant-filled-primary w-full">Login</button>
+
+			<div class="relative flex items-center">
+				<div class="flex-grow border-t border-border" />
+				<span class="flex-shrink mx-4 font-bold text-gray-400">OR</span>
+				<div class="flex-grow border-t border-border" />
+			</div>
+
+			<div class="grid gap-1 oauth">
+				<button class="btn bg-tertiary-500">
+					{@html GoogleIcon}
+				</button>
+				<button class="btn bg-tertiary-500">
+					{@html FacebookIcon}
+				</button>
+				<button class="btn bg-tertiary-500">
+					{@html GithubIcon}
+				</button>
+			</div>
 
 			<p class="text-center">
 				New to Lorem?
@@ -63,3 +102,9 @@
 		<slot />
 	</div>
 {/if}
+
+<style>
+	.oauth {
+		grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+	}
+</style>

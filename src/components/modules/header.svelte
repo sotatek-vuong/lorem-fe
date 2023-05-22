@@ -1,10 +1,17 @@
 <script>
 	import { AppBar, modalStore } from '@skeletonlabs/skeleton';
 
-	const onAuth = () => {
+	const onLogin = () => {
 		modalStore.trigger({
 			type: 'component',
-			component: 'auth',
+			component: 'login',
+		});
+	};
+
+	const onRegister = () => {
+		modalStore.trigger({
+			type: 'component',
+			component: 'register',
 		});
 	};
 </script>
@@ -21,8 +28,11 @@
 	</svelte:fragment>
 
 	<svelte:fragment slot="trail">
-		<button type="button" class="btn btn-sm variant-filled-primary" on:click={onAuth}
-			>Get Started</button
+		<button type="button" class="btn btn-sm hover:variant-soft-surface" on:click={onLogin}
+			>Login</button
+		>
+		<button type="button" class="btn btn-sm variant-filled-primary" on:click={onRegister}
+			>Register</button
 		>
 	</svelte:fragment>
 </AppBar>

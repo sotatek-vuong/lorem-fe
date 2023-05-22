@@ -34,8 +34,7 @@
 				.regex(
 					new RegExp('.*[`~<>?,./!@#$%^&*()\\-_+="\'|{}\\[\\];:\\\\].*'),
 					'1 special character',
-				)
-				.max(30, 'Length: 8-30'),
+				),
 			confirmPw: z.string().nonempty('This field cannot be empty.'),
 			agree: z.boolean().refine((s) => s, { message: 'Please check this to continue.' }),
 			recaptcha: z.string().nonempty(),

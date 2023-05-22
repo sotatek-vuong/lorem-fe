@@ -1,8 +1,6 @@
 import { PUBLIC_GOOGLE_CLIENT_ID } from '$env/static/public';
 import { writable } from 'svelte/store';
 
-interface;
-
 interface CurrentUser {
 	initialized: boolean;
 	username: string;
