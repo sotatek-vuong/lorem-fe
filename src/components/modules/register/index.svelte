@@ -9,6 +9,8 @@
 	import { z } from 'zod';
 	import Errors from './errors.svelte';
 	import Checkbox from '@/components/core/Checkbox.svelte';
+	import Recaptcha from '@/components/core/Recaptcha.svelte';
+	import _ from 'lodash';
 
 	const schema = z
 		.object({
@@ -17,7 +19,8 @@
 				.nonempty('This field cannot be empty.')
 				.min(3, '3-30 characters')
 				.max(30, '3-30 characters')
-				.regex(/^[a-zA-Z0-9]*$/g, 'Only numbers and letters'),
+				.regex(/^[a-zA-Z0-9]*$/g, 'Only numbers and letters')
+				.refine(async (s) => {}),
 			email: z
 				.string()
 				.nonempty('This field cannot be empty.')
@@ -35,24 +38,23 @@
 				.max(30, 'Length: 8-30'),
 			confirmPw: z.string().nonempty('This field cannot be empty.'),
 			agree: z.boolean().refine((s) => s, { message: 'Please check this to continue.' }),
+			recaptcha: z.string().nonempty(),
 		})
 		.refine(({ password, confirmPw }) => password === confirmPw, {
 			message: 'Password does not match.',
 			path: ['confirmPw'],
 		});
 
-	const { form, errors } = createForm<z.infer<typeof schema>>({
+	const { form, data, errors, isValid } = createForm<z.infer<typeof schema>>({
 		extend: [validator({ schema, level: 'error' })],
+		onSubmit: (data) => {
+			console.log(data);
+		},
 	});
 
 	const openLogin = () => {
 		modalStore.close();
 		modalStore.trigger({ type: 'component', component: 'login' });
-	};
-
-	const onSubmit = () => {
-		errors.subscribe(() => {});
-		console.log();
 	};
 </script>
 
@@ -67,7 +69,7 @@
 				>Login here</button
 			>
 		</p>
-		<form use:form novalidate on:submit={onSubmit} class="flex flex-col gap-6 mt-6">
+		<form use:form novalidate class="flex flex-col gap-6 mt-6">
 			<TextField label="Username" required name="username" error={$errors.username !== null}>
 				<svelte:fragment slot="helpertext">
 					<Errors
@@ -116,12 +118,10 @@
 				</svelte:fragment>
 			</TextField>
 
-			<Checkbox
-				name="agree"
-				label="I am above 18 years of age, and accept the Terms & Conditions."
-				required
-				error
-			>
+			<Checkbox name="agree" required error>
+				<svelte:fragment slot="label">
+					I am above 18 years of age, and accept the Terms & Conditions.
+				</svelte:fragment>
 				<svelte:fragment slot="helpertext">
 					{#if $errors.agree}
 						<p class="text-error-500">{$errors.agree[0]}</p>
@@ -129,7 +129,11 @@
 				</svelte:fragment>
 			</Checkbox>
 
-			<button type="submit" class="btn variant-filled-primary w-full">Register Now</button>
+			<Recaptcha bind:value={$data.recaptcha} />
+
+			<button disabled={!$isValid} type="submit" class="btn variant-filled-primary w-full"
+				>Register Now</button
+			>
 		</form>
 
 		<slot />

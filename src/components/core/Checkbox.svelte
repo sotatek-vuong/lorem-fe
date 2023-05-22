@@ -8,14 +8,12 @@
 	<input class="checkbox" type="checkbox" {...$$restProps} />
 
 	<div>
-		{#if label}
-			<p class="mb-1">
-				{#if required}
-					<span class="text-error-500">* </span>
-				{/if}
-				{label}
-			</p>
-		{/if}
+		<p class="mb-1">
+			{#if required}
+				<span class="text-error-500">* </span>
+			{/if}
+			<slot name="label" />
+		</p>
 		<slot name="helpertext" />
 	</div>
 </label>

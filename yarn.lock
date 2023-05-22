@@ -308,10 +308,25 @@
   resolved "https://registry.yarnpkg.com/@types/cookie/-/cookie-0.5.1.tgz#b29aa1f91a59f35e29ff8f7cb24faf1a3a750554"
   integrity sha512-COUnqfB2+ckwXXSFInsFdOAWQzCCx+a5hq2ruyj+Vjund94RJQd4LG2u9hnvJrTgunKAaax7ancBYlDrNYxA0g==
 
+"@types/google.accounts@^0.0.7":
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/@types/google.accounts/-/google.accounts-0.0.7.tgz#d9f20f29f3d14336967c905bddb2d89dc2bfc709"
+  integrity sha512-AAA2+/s/Oa9ETgaWY6JM2P3h8RiQ1FkdyI7QYKMY3hbIkwGbjEBLX0L6FpazVxHnq68ruDyl8Fi5v0tEwSyfeg==
+
+"@types/grecaptcha@^3.0.4":
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/@types/grecaptcha/-/grecaptcha-3.0.4.tgz#3de601f3b0cd0298faf052dd5bd62aff64c2be2e"
+  integrity sha512-7l1Y8DTGXkx/r4pwU1nMVAR+yD/QC+MCHKXAyEX/7JZhwcN1IED09aZ9vCjjkcGdhSQiu/eJqcXInpl6eEEEwg==
+
 "@types/json-schema@^7.0.9":
   version "7.0.11"
   resolved "https://registry.yarnpkg.com/@types/json-schema/-/json-schema-7.0.11.tgz#d421b6c527a3037f7c84433fd2c4229e016863d3"
   integrity sha512-wOuvG1SN4Us4rez+tylwwwCV1psiNVOkJeM3AUWUNWg/jDQY2+HE/444y5gc+jBmRqASOm2Oeh5c1axHobwRKQ==
+
+"@types/lodash@^4.14.194":
+  version "4.14.194"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.194.tgz#b71eb6f7a0ff11bff59fc987134a093029258a76"
+  integrity sha512-r22s9tAS7imvBt2lyHC9B8AGwWnXaYb1tY09oyLkXDs4vArpYJzw09nj8MLx5VfciBPGIb+ZwG0ssYnEPJxn/g==
 
 "@types/pug@^2.0.6":
   version "2.0.6"
@@ -1162,6 +1177,11 @@ lodash.merge@^4.6.2:
   resolved "https://registry.yarnpkg.com/lodash.merge/-/lodash.merge-4.6.2.tgz#558aa53b43b661e1925a0afdfa36a9a1085fe57a"
   integrity sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==
 
+lodash@^4.17.21:
+  version "4.17.21"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
+  integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
+
 lru-cache@^6.0.0:
   version "6.0.0"
   resolved "https://registry.yarnpkg.com/lru-cache/-/lru-cache-6.0.0.tgz#6d6fe6570ebd96aaf90fcad1dafa3b2566db3a94"
@@ -1688,6 +1708,13 @@ svelte-preprocess@^5.0.3:
     magic-string "^0.27.0"
     sorcery "^0.11.0"
     strip-indent "^3.0.0"
+
+svelte-recaptcha-v2@^0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/svelte-recaptcha-v2/-/svelte-recaptcha-v2-0.0.2.tgz#11f698b6b891ab9566f035d1816dfe29ae7a0b69"
+  integrity sha512-Sx4QuV/AtjxuwOf6C3yih+n3TLlKN+DefYt7wAFR8hjGcAOIAzcb66d0QQdElZJ2H34hvQc1hIaj3AtkoA7G6w==
+  dependencies:
+    debug "^4.3.2"
 
 svelte@^3.54.0, svelte@^3.58.0:
   version "3.59.1"
