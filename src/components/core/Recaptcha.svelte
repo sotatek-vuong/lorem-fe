@@ -22,15 +22,19 @@
 		value = '';
 	}
 
+	let placeholder: any;
+
 	function onLoadGrecaptcha() {
-		instanceId = window.grecaptcha.render('googleRecaptchaDiv', {
-			sitekey: PUBLIC_RECAPTCHA_SITE_KEY,
-			badge: 'bottomleft',
-			size: 'normal',
-			theme: 'dark',
-			callback: onSuccess,
-			'expired-callback': onError,
-			'error-callback': onError,
+		window.grecaptcha.ready(() => {
+			instanceId = window.grecaptcha.render(placeholder, {
+				sitekey: PUBLIC_RECAPTCHA_SITE_KEY,
+				badge: 'bottomleft',
+				size: 'normal',
+				theme: 'dark',
+				callback: onSuccess,
+				'expired-callback': onError,
+				'error-callback': onError,
+			});
 		});
 	}
 
@@ -40,6 +44,9 @@
 
 	onDestroy(() => {
 		window.onLoadGrecaptcha = null;
+		if (window.grecaptcha) {
+			window.grecaptcha.reset(instanceId);
+		}
 	});
 </script>
 
@@ -47,4 +54,4 @@
 	<script src="https://www.google.com/recaptcha/api.js?onload=onLoadGrecaptcha&render=explicit">
 	</script>
 </svelte:head>
-<div id="googleRecaptchaDiv" class="g-recaptcha" />
+<div bind:this={placeholder} class="g-recaptcha" />

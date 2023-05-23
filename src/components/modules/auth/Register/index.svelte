@@ -1,6 +1,4 @@
 <script lang="ts">
-	export const parent = {};
-
 	// Stores
 	import { modalStore } from '@skeletonlabs/skeleton';
 	import TextField from '@/components/core/TextField.svelte';
@@ -57,7 +55,7 @@
 	};
 </script>
 
-{#if modalStore}
+{#if $modalStore[0]?.component === 'register'}
 	<div class="card flex-col p-10 w-modal">
 		<h2 class="h2 mb-2 font-bold">Register to Play</h2>
 		<p class="text-content-2">
@@ -131,8 +129,8 @@
 			<Recaptcha bind:value={$data.recaptcha} />
 
 			<button disabled={!$isValid} type="submit" class="btn variant-filled-primary w-full"
-				>Register Now</button
-			>
+				>Register Now
+			</button>
 		</form>
 
 		<slot />

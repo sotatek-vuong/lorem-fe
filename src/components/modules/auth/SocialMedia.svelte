@@ -1,0 +1,40 @@
+<script lang="ts">
+	import GoogleIcon from 'src/assets/icons/google.svg?raw';
+	import FacebookIcon from 'src/assets/icons/facebook.svg?raw';
+	import GithubIcon from 'src/assets/icons/github.svg?raw';
+	import { PUBLIC_GOOGLE_CLIENT_ID } from '$env/static/public';
+
+	function onGoogle() {
+		const client = google.accounts.oauth2.initTokenClient({
+			client_id: PUBLIC_GOOGLE_CLIENT_ID,
+			scope: 'https://www.googleapis.com/auth/userinfo.profile',
+			callback: (res) => {
+				const a = google.accounts.oauth2.hasGrantedAnyScope(
+					res,
+					'https://www.googleapis.com/auth/userinfo.profile',
+				);
+				console.log({ res });
+			},
+		});
+
+		client.requestAccessToken();
+	}
+</script>
+
+<div class="grid gap-1 oauth">
+	<button type="submit" class="btn bg-tertiary-500" on:click={onGoogle}>
+		{@html GoogleIcon}
+	</button>
+	<button type="submit" class="btn bg-tertiary-500">
+		{@html FacebookIcon}
+	</button>
+	<button type="submit" class="btn bg-tertiary-500">
+		{@html GithubIcon}
+	</button>
+</div>
+
+<style>
+	.oauth {
+		grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+	}
+</style>
