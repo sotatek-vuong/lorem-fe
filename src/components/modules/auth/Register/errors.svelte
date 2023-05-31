@@ -5,10 +5,10 @@
 </script>
 
 {#if helperText !== ''}
-	<p class="text-content-2 text-xs leading-[13px]">{helperText}</p>
+	<p class="text-content-2 mb-1 text-xs leading-[13px]">{helperText}</p>
 {/if}
 {#if errors}
-	<ul class="text-error-500 list-disc list-inside marker:mr-1">
+	<ul class="list-disc list-inside marker:mr-1">
 		{errorTitle}
 		{#each errors as err}
 			<li>

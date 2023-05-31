@@ -19,18 +19,27 @@
 		<span
 			>{label}
 			{#if required}
-				<span class="text-error-500"> *</span>
+				<span class="text-status-error"> *</span>
 			{/if}
 		</span>
 	{/if}
 
-	<div class="input-group flex items-center{error ? ' border-error-500' : ''}">
-		<input class="flex-grow flex-shrink-0" bind:value {...$$restProps} {...{ type }} />
+	<div class="input-group flex items-center{error ? ' !border-status-error' : ''}">
+		<input
+			class="flex-grow flex-shrink-0{error ? ' !border-status-error' : ''}"
+			bind:value
+			{...$$restProps}
+			{...{ type }}
+		/>
 		{#if showToggle}
 			<button type="button" class="btn-icon hover:variant-soft-surface" on:click={onToggle}>
 				{@html type === 'password' ? ShowPw : HidePw}
 			</button>
 		{/if}
 	</div>
-	<slot name="helpertext" />
+	{#if $$slots.helpertext}
+		<div class={error ? 'text-status-error' : ''}>
+			<slot name="helpertext" />
+		</div>
+	{/if}
 </label>

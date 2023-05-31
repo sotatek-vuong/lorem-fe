@@ -1,5 +1,4 @@
 <script lang="ts">
-	export let label: string = '';
 	export let required: boolean = false;
 	export let error: boolean = false;
 </script>
@@ -8,12 +7,16 @@
 	<input class="checkbox" type="checkbox" {...$$restProps} />
 
 	<div>
-		<p class="mb-1">
+		<p>
 			{#if required}
-				<span class="text-error-500">* </span>
+				<span class="text-status-error">* </span>
 			{/if}
 			<slot name="label" />
 		</p>
-		<slot name="helpertext" />
+		{#if $$slots.helpertext}
+			<div class={error ? 'text-status-error' : ''}>
+				<slot name="helpertext" />
+			</div>
+		{/if}
 	</div>
 </label>

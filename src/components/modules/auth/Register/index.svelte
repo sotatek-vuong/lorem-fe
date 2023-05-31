@@ -17,8 +17,7 @@
 				.nonempty('This field cannot be empty.')
 				.min(3, '3-30 characters')
 				.max(30, '3-30 characters')
-				.regex(/^[a-zA-Z0-9]*$/g, 'Only numbers and letters')
-				.refine(async (s) => {}),
+				.regex(/^[a-zA-Z0-9]*$/g, 'Only numbers and letters'),
 			email: z
 				.string()
 				.nonempty('This field cannot be empty.')
@@ -62,8 +61,7 @@
 			Already a user?
 			<button
 				on:click={openLogin}
-				class="no-underline hover:underline cursor-pointer self-start text-primary-500"
-				>Login here</button
+				class="no-underline hover:underline cursor-pointer self-start text-main">Login here</button
 			>
 		</p>
 		<form use:form novalidate class="flex flex-col gap-6 mt-6">
@@ -80,7 +78,7 @@
 			<TextField label="Email" required name="email" type="email" error={$errors.email !== null}>
 				<svelte:fragment slot="helpertext">
 					{#if $errors.email}
-						<p class="text-error-500">{$errors.email[0]}</p>
+						{$errors.email[0]}
 					{/if}
 				</svelte:fragment>
 			</TextField>
@@ -110,18 +108,19 @@
 			>
 				<svelte:fragment slot="helpertext">
 					{#if $errors.confirmPw}
-						<p class="text-error-500">{$errors.confirmPw[0]}</p>
+						{$errors.confirmPw[0]}
 					{/if}
 				</svelte:fragment>
 			</TextField>
 
 			<Checkbox name="agree" required error>
 				<svelte:fragment slot="label">
-					I am above 18 years of age, and accept the Terms & Conditions.
+					I am above 18 years of age, and accept the
+					<a href="/" class="underline" target="blank">Terms & Conditions</a>
 				</svelte:fragment>
 				<svelte:fragment slot="helpertext">
 					{#if $errors.agree}
-						<p class="text-error-500">{$errors.agree[0]}</p>
+						{$errors.agree[0]}
 					{/if}
 				</svelte:fragment>
 			</Checkbox>

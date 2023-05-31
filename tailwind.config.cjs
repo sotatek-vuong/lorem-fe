@@ -9,14 +9,11 @@ module.exports = {
 	],
 	theme: {
 		extend: {
-			fontSize: {
-				base: ['0.875rem', '1.25'],
-			},
-			spacing: { 1: '8px' },
 			colors: {
+				main: '#ffd610',
 				status: {
-					red: '#da4545',
-					green: '#10a342',
+					error: '#da4545',
+					success: '#10a342',
 				},
 				border: '#383c43',
 				bg: {

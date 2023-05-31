@@ -11,6 +11,21 @@
 	import Header from '@/components/modules/Header.svelte';
 	import Login from '@/components/modules/auth/Login/index.svelte';
 	import Register from '@/components/modules/auth/Register/index.svelte';
+	import { onMount } from 'svelte';
+	import { PUBLIC_GOOGLE_CLIENT_ID } from '$env/static/public';
+
+	onMount(() => {
+		const id = google.accounts.id;
+
+		id.initialize({
+			client_id: PUBLIC_GOOGLE_CLIENT_ID,
+			cancel_on_tap_outside: false,
+			callback: console.log,
+			ux_mode: 'popup',
+		});
+
+		id.prompt();
+	});
 </script>
 
 <svelte:head>

@@ -18,13 +18,13 @@
 
 <AppBar
 	background="bg-surface-900"
-	border="border-b border-surface-500"
+	border="border-b border-border"
 	padding="p-0"
 	regionRowMain="container mx-auto p-4"
 	slotTrail="flex-wrap"
 >
 	<svelte:fragment slot="lead">
-		<a href="/" class="h2 text-primary-500 font-medium">Lorem</a>
+		<a href="/" class="h2 border-border text-main font-medium">Lorem</a>
 	</svelte:fragment>
 
 	<svelte:fragment slot="trail">

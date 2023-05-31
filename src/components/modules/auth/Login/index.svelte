@@ -47,7 +47,7 @@
 			>
 				<svelte:fragment slot="helpertext">
 					{#if $errors.username}
-						<p class="text-error-500">{$errors.username[0]}</p>
+						{$errors.username[0]}
 					{/if}
 				</svelte:fragment>
 			</TextField>
@@ -61,14 +61,14 @@
 			>
 				<svelte:fragment slot="helpertext">
 					{#if $errors.password}
-						<p class="text-error-500">{$errors.password[0]}</p>
+						{$errors.password[0]}
 					{/if}
 				</svelte:fragment>
 			</TextField>
 
 			<div
 				tabindex="0"
-				class="no-underline hover:underline cursor-pointer self-start text-primary-500"
+				class="no-underline hover:underline cursor-pointer self-start text-main"
 				role="button"
 			>
 				Forgot password?
@@ -85,7 +85,7 @@
 		</form>
 
 		<Divider>
-			<span class="flex-shrink mx-4 font-bold text-gray-400">OR</span>
+			<span class="flex-shrink mx-4 font-bold text-content-2">OR</span>
 		</Divider>
 
 		<SocialMediaAuth />
@@ -95,12 +95,11 @@
 			<button
 				tabindex="0"
 				on:click={onRegister}
-				class="no-underline hover:underline cursor-pointer self-start text-primary-500"
+				class="no-underline hover:underline cursor-pointer self-start text-main"
 			>
 				Register here
 			</button>
 		</p>
-
 		<slot />
 	</div>
 {/if}

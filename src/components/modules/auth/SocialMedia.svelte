@@ -9,26 +9,21 @@
 			client_id: PUBLIC_GOOGLE_CLIENT_ID,
 			scope: 'https://www.googleapis.com/auth/userinfo.profile',
 			callback: (res) => {
-				const a = google.accounts.oauth2.hasGrantedAnyScope(
-					res,
-					'https://www.googleapis.com/auth/userinfo.profile',
-				);
 				console.log({ res });
 			},
 		});
-
 		client.requestAccessToken();
 	}
 </script>
 
 <div class="grid gap-1 oauth">
-	<button type="submit" class="btn bg-tertiary-500" on:click={onGoogle}>
+	<button type="submit" class="btn bg-bg-1" on:click={onGoogle}>
 		{@html GoogleIcon}
 	</button>
-	<button type="submit" class="btn bg-tertiary-500">
+	<button type="submit" class="btn bg-bg-1">
 		{@html FacebookIcon}
 	</button>
-	<button type="submit" class="btn bg-tertiary-500">
+	<button type="submit" class="btn bg-bg-1">
 		{@html GithubIcon}
 	</button>
 </div>
