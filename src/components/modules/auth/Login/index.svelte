@@ -7,8 +7,9 @@
 	import { validator } from '@felte/validator-zod';
 	import TextField from '@/components/core/TextField.svelte';
 	import Divider from '@/components/core/Divider.svelte';
-	import SocialMediaAuth from '@/components/modules/auth/SocialMedia.svelte';
+	import SocialMedia from '@/components/modules/auth/SocialMedia.svelte';
 	import _ from 'lodash';
+	import Checkbox from '@/components/core/Checkbox.svelte';
 
 	const schema = z.object({
 		username: z
@@ -19,6 +20,7 @@
 			.optional()
 			.or(z.string().email('Email is invalid format. Please check again.')),
 		password: z.string().min(8, 'Minimum character length is 8'),
+		agree: z.boolean().refine((s) => s, { message: 'Please check this to continue.' }),
 		recaptcha: z.string().nonempty(),
 	});
 
@@ -66,6 +68,18 @@
 				</svelte:fragment>
 			</TextField>
 
+			<Checkbox name="agree" slotLabel="items-center" required error={$errors.agree !== null}>
+				<svelte:fragment slot="label">
+					I am above 18 years of age, and accept the
+					<a href="/" class="underline" target="blank">Terms & Conditions</a>
+				</svelte:fragment>
+				<svelte:fragment slot="helpertext">
+					{#if $errors.agree}
+						{$errors.agree[0]}
+					{/if}
+				</svelte:fragment>
+			</Checkbox>
+
 			<div
 				tabindex="0"
 				class="no-underline hover:underline cursor-pointer self-start text-main"
@@ -88,7 +102,7 @@
 			<span class="flex-shrink mx-4 font-bold text-content-2">OR</span>
 		</Divider>
 
-		<SocialMediaAuth />
+		<SocialMedia />
 
 		<p class="text-center">
 			New to Lorem?

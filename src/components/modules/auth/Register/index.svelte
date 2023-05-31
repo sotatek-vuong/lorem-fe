@@ -9,6 +9,8 @@
 	import Checkbox from '@/components/core/Checkbox.svelte';
 	import Recaptcha from '@/components/core/Recaptcha.svelte';
 	import _ from 'lodash';
+	import Divider from '@/components/core/Divider.svelte';
+	import SocialMedia from '../SocialMedia.svelte';
 
 	const schema = z
 		.object({
@@ -55,7 +57,7 @@
 </script>
 
 {#if $modalStore[0]?.component === 'register'}
-	<div class="card flex-col p-10 w-modal">
+	<div class="card p-10 w-modal">
 		<h2 class="h2 mb-2 font-bold">Register to Play</h2>
 		<p class="text-content-2">
 			Already a user?
@@ -131,6 +133,12 @@
 				>Register Now
 			</button>
 		</form>
+
+		<Divider slotRoot="my-4">
+			<span class="flex-shrink mx-4 font-bold text-content-2">OR</span>
+		</Divider>
+
+		<SocialMedia />
 
 		<slot />
 	</div>

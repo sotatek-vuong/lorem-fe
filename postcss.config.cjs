@@ -10,6 +10,7 @@ const config = {
 		'postcss-import': {},
 		'tailwindcss/nesting': {},
 		tailwindcss: {},
+		'@thedutchcoder/postcss-rem-to-px': {},
 		autoprefixer: {},
 	},
 };

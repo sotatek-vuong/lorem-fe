@@ -1,9 +1,11 @@
 <script lang="ts">
 	export let required: boolean = false;
 	export let error: boolean = false;
+
+	export let slotLabel: string = '';
 </script>
 
-<label class="flex items-start gap-3">
+<label class="flex items-start gap-3 {slotLabel}">
 	<input class="checkbox" type="checkbox" {...$$restProps} />
 
 	<div>
@@ -14,7 +16,7 @@
 			<slot name="label" />
 		</p>
 		{#if $$slots.helpertext}
-			<div class={error ? 'text-status-error' : ''}>
+			<div class="mt-1 {error ? 'text-status-error' : ''}">
 				<slot name="helpertext" />
 			</div>
 		{/if}

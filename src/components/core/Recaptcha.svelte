@@ -43,10 +43,10 @@
 	});
 
 	onDestroy(() => {
-		window.onLoadGrecaptcha = null;
-		if (window.grecaptcha) {
-			window.grecaptcha.reset(instanceId);
-		}
+		// window.onLoadGrecaptcha = null;
+		// if (window.grecaptcha) {
+		// 	window.grecaptcha.reset(instanceId);
+		// }
 	});
 </script>
 
