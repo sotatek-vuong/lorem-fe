@@ -30,6 +30,7 @@
 
 <svelte:head>
 	<script src="https://accounts.google.com/gsi/client"></script>
+	<script src="https://connect.facebook.net/en_US/sdk.js"></script>
 </svelte:head>
 <AppShell>
 	<svelte:fragment slot="header">

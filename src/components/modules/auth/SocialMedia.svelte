@@ -7,12 +7,24 @@
 	function onGoogle() {
 		const client = google.accounts.oauth2.initTokenClient({
 			client_id: PUBLIC_GOOGLE_CLIENT_ID,
-			scope: 'https://www.googleapis.com/auth/userinfo.profile',
+			scope:
+				'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email openid',
 			callback: (res) => {
 				console.log({ res });
 			},
 		});
 		client.requestAccessToken();
+	}
+
+	function onFb() {
+		window.FB.init({
+			appId: '1181911378889864',
+			autoLogAppEvents: true,
+			xfbml: true,
+			version: 'v17.0',
+		});
+
+		window.FB.getAccessToken();
 	}
 </script>
 
