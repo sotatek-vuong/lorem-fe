@@ -1,6 +1,23 @@
+<script context="module" lang="ts">
+	export const loginSchema = z.object({
+		username: z.union([
+			z.string().email('Email is invalid format. Please check again.'),
+			z
+				.string()
+				.min(4, 'Minimum character length is 4')
+				.max(40, 'Maximum character length is 40')
+				.regex(/^[a-zA-Z0-9]*$/g, 'Only numbers and letters'),
+		]),
+		password: z.string().min(8, 'Minimum character length is 8'),
+		agree: z.boolean().refine((s) => s, { message: 'Please check this to continue.' }),
+		recaptcha: z.string().nonempty(),
+	});
+
+	export type LoginSchemaType = z.infer<typeof loginSchema>;
+</script>
+
 <script lang="ts">
 	import { z } from 'zod';
-
 	import { modalStore } from '@skeletonlabs/skeleton';
 	import Recaptcha from '@/components/core/Recaptcha.svelte';
 	import { createForm } from 'felte';
@@ -10,26 +27,16 @@
 	import SocialMedia from '@/components/modules/auth/SocialMedia.svelte';
 	import _ from 'lodash';
 	import Checkbox from '@/components/core/Checkbox.svelte';
+	import { reporter, ValidationMessage } from '@felte/reporter-svelte';
 
-	const schema = z.object({
-		username: z
-			.string()
-			.min(3, 'Minimum character length is 3')
-			.max(30, 'Maximum character length is 30')
-			.regex(/^[a-zA-Z0-9]*$/g, 'Only numbers and letters')
-			.optional()
-			.or(z.string().email('Email is invalid format. Please check again.')),
-		password: z.string().min(8, 'Minimum character length is 8'),
-		agree: z.boolean().refine((s) => s, { message: 'Please check this to continue.' }),
-		recaptcha: z.string().nonempty(),
-	});
-
-	const { form, errors, data, isValid } = createForm<z.infer<typeof schema>>({
-		extend: [validator({ schema, level: 'error' })],
+	const { form, errors, isValid } = createForm<LoginSchemaType>({
+		extend: [validator({ schema: loginSchema, level: 'error' }), reporter],
 		onSubmit: (data) => {
 			console.log(data);
 		},
 	});
+
+	$: console.log($errors);
 
 	const onRegister = () => {
 		modalStore.close();
@@ -48,9 +55,11 @@
 				error={$errors.username !== null}
 			>
 				<svelte:fragment slot="helpertext">
-					{#if $errors.username}
-						{$errors.username[0]}
-					{/if}
+					<ValidationMessage for="username" let:messages>
+						{#if messages}
+							{messages[0]}
+						{/if}
+					</ValidationMessage>
 				</svelte:fragment>
 			</TextField>
 
@@ -62,9 +71,11 @@
 				error={$errors.password !== null}
 			>
 				<svelte:fragment slot="helpertext">
-					{#if $errors.password}
-						{$errors.password[0]}
-					{/if}
+					<ValidationMessage for="password" let:messages>
+						{#if messages}
+							{messages[0]}
+						{/if}
+					</ValidationMessage>
 				</svelte:fragment>
 			</TextField>
 
@@ -74,9 +85,11 @@
 					<a href="/" class="underline" target="blank">Terms & Conditions</a>
 				</svelte:fragment>
 				<svelte:fragment slot="helpertext">
-					{#if $errors.agree}
-						{$errors.agree[0]}
-					{/if}
+					<ValidationMessage for="agree" let:messages>
+						{#if messages}
+							{messages[0]}
+						{/if}
+					</ValidationMessage>
 				</svelte:fragment>
 			</Checkbox>
 
@@ -88,7 +101,7 @@
 				Forgot password?
 			</div>
 
-			<Recaptcha bind:value={$data.recaptcha} />
+			<Recaptcha name="recaptcha" />
 
 			<button
 				disabled={!$isValid}

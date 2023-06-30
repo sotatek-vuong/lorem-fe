@@ -9,17 +9,30 @@
 
 <script lang="ts">
 	import { PUBLIC_RECAPTCHA_SITE_KEY } from '$env/static/public';
-	import { onMount, onDestroy } from 'svelte';
+	import { createField } from 'felte';
+	import { onMount } from 'svelte';
 
-	export let value: string = '';
+	export let name: string;
+
+	const { field, onChange } = createField(name, {
+		onFormReset: (e) => {
+			console.log({ e });
+		},
+	});
 
 	let instanceId = -1;
 
-	function onSuccess(token: string) {
-		value = token;
+	function onReset() {
+		onChange('');
 	}
-	function onError() {
-		value = '';
+	export function _reset() {
+		// // i don't know why but it fixes the bug
+		// setTimeout(() => {
+		// if (instanceId != -1) {
+		// window.grecaptcha.reset(instanceId);
+		onReset();
+		// }
+		// }, 1000);
 	}
 
 	let placeholder: any;
@@ -31,9 +44,9 @@
 				badge: 'bottomleft',
 				size: 'normal',
 				theme: 'dark',
-				callback: onSuccess,
-				'expired-callback': onError,
-				'error-callback': onError,
+				callback: onChange,
+				'expired-callback': onReset,
+				'error-callback': onReset,
 			});
 		});
 	}
@@ -42,16 +55,16 @@
 		window.onLoadGrecaptcha = onLoadGrecaptcha;
 	});
 
-	onDestroy(() => {
-		// window.onLoadGrecaptcha = null;
-		// if (window.grecaptcha) {
-		// 	window.grecaptcha.reset(instanceId);
-		// }
-	});
+	// onDestroy(() => {
+	// window.onLoadGrecaptcha = null;
+	// if (window.grecaptcha) {
+	// 	window.grecaptcha.reset(instanceId);
+	// }
+	// });
 </script>
 
 <svelte:head>
 	<script src="https://www.google.com/recaptcha/api.js?onload=onLoadGrecaptcha&render=explicit">
 	</script>
 </svelte:head>
-<div bind:this={placeholder} class="g-recaptcha" />
+<div bind:this={placeholder} use:field tabindex="0" class="g-recaptcha" />

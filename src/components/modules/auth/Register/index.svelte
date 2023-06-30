@@ -1,18 +1,5 @@
-<script lang="ts">
-	// Stores
-	import { modalStore } from '@skeletonlabs/skeleton';
-	import TextField from '@/components/core/TextField.svelte';
-	import { createForm } from 'felte';
-	import { validator } from '@felte/validator-zod';
-	import { z } from 'zod';
-	import Errors from './errors.svelte';
-	import Checkbox from '@/components/core/Checkbox.svelte';
-	import Recaptcha from '@/components/core/Recaptcha.svelte';
-	import _ from 'lodash';
-	import Divider from '@/components/core/Divider.svelte';
-	import SocialMedia from '../SocialMedia.svelte';
-
-	const schema = z
+<script context="module" lang="ts">
+	export const registerSchema = z
 		.object({
 			username: z
 				.string()
@@ -30,23 +17,67 @@
 				.min(8, 'At least 8 characters')
 				.regex(/.*[0-9].*/, '1 number')
 				.regex(/.*[A-Z].*/, '1 uppercase')
-				.regex(
-					new RegExp('.*[`~<>?,./!@#$%^&*()\\-_+="\'|{}\\[\\];:\\\\].*'),
-					'1 special character',
-				),
+				.regex(/.*[!@#$%^&*()\-_=+[\]{};':"\\|,.<>/?~`].*/, '1 special character'),
 			confirmPw: z.string().nonempty('This field cannot be empty.'),
 			agree: z.boolean().refine((s) => s, { message: 'Please check this to continue.' }),
-			recaptcha: z.string().nonempty(),
+			recaptcha: z.string().nonempty('required'),
 		})
 		.refine(({ password, confirmPw }) => password === confirmPw, {
 			message: 'Password does not match.',
 			path: ['confirmPw'],
 		});
 
-	const { form, data, errors, isValid } = createForm<z.infer<typeof schema>>({
-		extend: [validator({ schema, level: 'error' })],
-		onSubmit: (data) => {
-			console.log(data);
+	export type RegisterSchemaType = z.infer<typeof registerSchema>;
+</script>
+
+<script lang="ts">
+	import { ProgressRadial, modalStore } from '@skeletonlabs/skeleton';
+	import TextField from '@/components/core/TextField.svelte';
+	import { createForm } from 'felte';
+	import { validator } from '@felte/validator-zod';
+	import { z } from 'zod';
+	import Checkbox from '@/components/core/Checkbox.svelte';
+	import Recaptcha from '@/components/core/Recaptcha.svelte';
+	import _ from 'lodash';
+	import Divider from '@/components/core/Divider.svelte';
+	import SocialMedia from '../SocialMedia.svelte';
+	import { register } from '@/api/auth';
+	import { reporter, ValidationMessage } from '@felte/reporter-svelte';
+
+	let recaptchaRef: Recaptcha;
+
+	const { form, errors, isValid, isSubmitting } = createForm<RegisterSchemaType>({
+		extend: [validator({ schema: registerSchema, level: 'error' }), reporter],
+		initialValues: {
+			email: 'mm123@yopmail.com',
+			username: 'mm123',
+			password: 'Betu_12345',
+			confirmPw: 'Betu_12345',
+			agree: true,
+			recaptcha: '',
+		},
+		onSubmit: async (data, ctx) => {
+			try {
+				const res = await register(data);
+				return res;
+			} catch (err: any) {
+				console.log({ err });
+				switch (err.code) {
+					case '1':
+						ctx.setErrors('username', 'Username already exist. Please try another one.');
+						break;
+
+					case '2':
+						ctx.setErrors('email', 'Email already exist. Please try another one.');
+						break;
+				}
+			} finally {
+				console.log(recaptchaRef);
+
+				// ctx.resetField('recaptcha');
+				// recaptchaRef._reset();
+				window.grecaptcha.reset();
+			}
 		},
 	});
 
@@ -66,22 +97,32 @@
 				class="no-underline hover:underline cursor-pointer self-start text-main">Login here</button
 			>
 		</p>
-		<form use:form novalidate class="flex flex-col gap-6 mt-6">
+		<form use:form novalidate autocapitalize="off" class="flex flex-col gap-6 mt-6">
 			<TextField label="Username" required name="username" error={$errors.username !== null}>
 				<svelte:fragment slot="helpertext">
-					<Errors
-						errorTitle="Username must be:"
-						helperText={'Lowercase letters and numbers only'}
-						errors={$errors.username}
-					/>
+					<p class="text-content-2 mb-1 text-xs leading-[13px]">
+						Lowercase letters and numbers only
+					</p>
+					<ValidationMessage for="username" let:messages>
+						{#if messages}
+							<ul class="list-disc list-inside marker:mr-1">
+								Username must be:
+								{#each messages as err}
+									<li>{err}</li>
+								{/each}
+							</ul>
+						{/if}
+					</ValidationMessage>
 				</svelte:fragment>
 			</TextField>
 
 			<TextField label="Email" required name="email" type="email" error={$errors.email !== null}>
 				<svelte:fragment slot="helpertext">
-					{#if $errors.email}
-						{$errors.email[0]}
-					{/if}
+					<ValidationMessage for="email" let:messages>
+						{#if messages}
+							{messages[0]}
+						{/if}
+					</ValidationMessage>
 				</svelte:fragment>
 			</TextField>
 
@@ -93,11 +134,19 @@
 				error={$errors.password !== null}
 			>
 				<svelte:fragment slot="helpertext">
-					<Errors
-						helperText="Use 8 or more characters with at least 1 uppercase, numbers & symbols."
-						errorTitle="Password must contain:"
-						errors={$errors.password}
-					/>
+					<p class="text-content-2 mb-1 text-xs leading-[13px]">
+						Use 8 or more characters with at least 1 uppercase, numbers & symbols.
+					</p>
+					<ValidationMessage for="password" let:messages>
+						{#if messages}
+							<ul class="list-disc list-inside marker:mr-1">
+								Password must contain:
+								{#each messages as err}
+									<li>{err}</li>
+								{/each}
+							</ul>
+						{/if}
+					</ValidationMessage>
 				</svelte:fragment>
 			</TextField>
 
@@ -109,9 +158,11 @@
 				error={$errors.confirmPw !== null}
 			>
 				<svelte:fragment slot="helpertext">
-					{#if $errors.confirmPw}
-						{$errors.confirmPw[0]}
-					{/if}
+					<ValidationMessage for="confirmPw" let:messages>
+						{#if messages}
+							{messages[0]}
+						{/if}
+					</ValidationMessage>
 				</svelte:fragment>
 			</TextField>
 
@@ -121,16 +172,27 @@
 					<a href="/" class="underline" target="blank">Terms & Conditions</a>
 				</svelte:fragment>
 				<svelte:fragment slot="helpertext">
-					{#if $errors.agree}
-						{$errors.agree[0]}
-					{/if}
+					<ValidationMessage for="agree" let:messages>
+						{#if messages}
+							{messages[0]}
+						{/if}
+					</ValidationMessage>
 				</svelte:fragment>
 			</Checkbox>
 
-			<Recaptcha bind:value={$data.recaptcha} />
+			<Recaptcha bind:this={recaptchaRef} name="recaptcha" />
 
-			<button disabled={!$isValid} type="submit" class="btn variant-filled-primary w-full"
-				>Register Now
+			<button
+				disabled={!$isValid || $isSubmitting}
+				type="submit"
+				class="btn variant-filled-primary w-full"
+			>
+				{#if $isSubmitting}
+					<span>
+						<ProgressRadial width="w-4" meter="stroke-bg-1" track="stroke-bg-1/30" />
+					</span>
+				{/if}
+				<span>Register Now</span>
 			</button>
 		</form>
 
