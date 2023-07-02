@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	// Your selected Skeleton theme:
 	import '@skeletonlabs/skeleton/themes/theme-skeleton.css';
 
@@ -11,8 +11,22 @@
 	import Header from '@/components/modules/Header.svelte';
 	import Login from '@/components/modules/auth/Login/index.svelte';
 	import Register from '@/components/modules/auth/Register/index.svelte';
-	import { onMount } from 'svelte';
+	import { writable } from 'svelte/store';
+	import type { AuthResponse } from '@/api/auth';
+	import type { LayoutData } from './$types';
+	import { setContext } from 'svelte';
+	import { CTX_STORE } from '@/utils/constants/key';
 	// import { PUBLIC_GOOGLE_CLIENT_ID } from '$env/static/public';
+
+	export let data: LayoutData;
+	const authStore = writable();
+	$: {
+		if (data) {
+			authStore.set(data);
+		}
+	}
+
+	setContext(CTX_STORE.AUTH, authStore);
 
 	// onMount(() => {
 	// 	const id = google.accounts.id;

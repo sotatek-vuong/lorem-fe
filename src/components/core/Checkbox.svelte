@@ -1,6 +1,6 @@
 <script lang="ts">
 	export let required: boolean = false;
-	export let error: boolean = false;
+	export let error: any = false;
 
 	export let slotLabel: string = '';
 </script>

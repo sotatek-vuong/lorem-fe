@@ -41,42 +41,40 @@
 	import _ from 'lodash';
 	import Divider from '@/components/core/Divider.svelte';
 	import SocialMedia from '../SocialMedia.svelte';
-	import { register } from '@/api/auth';
+	import { register, type AuthResponse } from '@/api/auth';
 	import { reporter, ValidationMessage } from '@felte/reporter-svelte';
+	import { CTX_STORE } from '@/utils/constants/key';
+	import { getContext } from 'svelte';
+	import type { Writable } from 'svelte/store';
 
 	let recaptchaRef: Recaptcha;
 
+	const authStore = getContext<Writable<AuthResponse>>(CTX_STORE.AUTH);
 	const { form, errors, isValid, isSubmitting } = createForm<RegisterSchemaType>({
 		extend: [validator({ schema: registerSchema, level: 'error' }), reporter],
 		initialValues: {
-			email: 'mm123@yopmail.com',
-			username: 'mm123',
-			password: 'Betu_12345',
-			confirmPw: 'Betu_12345',
-			agree: true,
+			email: '',
+			username: '',
+			password: '',
+			confirmPw: '',
+			agree: false,
 			recaptcha: '',
 		},
-		onSubmit: async (data, ctx) => {
-			try {
-				const res = await register(data);
-				return res;
-			} catch (err: any) {
-				console.log({ err });
-				switch (err.code) {
-					case '1':
-						ctx.setErrors('username', 'Username already exist. Please try another one.');
-						break;
+		onSubmit: async (body) => {
+			const data = await register(body);
+			authStore.set(data);
+			modalStore.close();
+		},
+		onError: async (err: any, ctx) => {
+			await recaptchaRef.reset();
+			switch (err.code) {
+				case '1':
+					ctx.setErrors('username', 'Username already exist. Please try another one.');
+					break;
 
-					case '2':
-						ctx.setErrors('email', 'Email already exist. Please try another one.');
-						break;
-				}
-			} finally {
-				console.log(recaptchaRef);
-
-				// ctx.resetField('recaptcha');
-				// recaptchaRef._reset();
-				window.grecaptcha.reset();
+				case '2':
+					ctx.setErrors('email', 'Email already exist. Please try another one.');
+					break;
 			}
 		},
 	});
@@ -89,7 +87,7 @@
 
 {#if $modalStore[0]?.component === 'register'}
 	<div class="card p-10 w-modal">
-		<h2 class="h2 mb-2 font-bold">Register to Play</h2>
+		<h2 class="h2 text-2xl mb-2 font-bold">Register to Play</h2>
 		<p class="text-content-2">
 			Already a user?
 			<button
@@ -98,7 +96,7 @@
 			>
 		</p>
 		<form use:form novalidate autocapitalize="off" class="flex flex-col gap-6 mt-6">
-			<TextField label="Username" required name="username" error={$errors.username !== null}>
+			<TextField label="Username" required name="username" error={$errors.username}>
 				<svelte:fragment slot="helpertext">
 					<p class="text-content-2 mb-1 text-xs leading-[13px]">
 						Lowercase letters and numbers only
@@ -116,7 +114,7 @@
 				</svelte:fragment>
 			</TextField>
 
-			<TextField label="Email" required name="email" type="email" error={$errors.email !== null}>
+			<TextField label="Email" required name="email" type="email" error={$errors.email}>
 				<svelte:fragment slot="helpertext">
 					<ValidationMessage for="email" let:messages>
 						{#if messages}
@@ -126,13 +124,7 @@
 				</svelte:fragment>
 			</TextField>
 
-			<TextField
-				label="Password"
-				required
-				name="password"
-				type="password"
-				error={$errors.password !== null}
-			>
+			<TextField label="Password" required name="password" type="password" error={$errors.password}>
 				<svelte:fragment slot="helpertext">
 					<p class="text-content-2 mb-1 text-xs leading-[13px]">
 						Use 8 or more characters with at least 1 uppercase, numbers & symbols.
@@ -155,7 +147,7 @@
 				required
 				name="confirmPw"
 				type="password"
-				error={$errors.confirmPw !== null}
+				error={$errors.confirmPw}
 			>
 				<svelte:fragment slot="helpertext">
 					<ValidationMessage for="confirmPw" let:messages>
@@ -166,7 +158,7 @@
 				</svelte:fragment>
 			</TextField>
 
-			<Checkbox name="agree" required error>
+			<Checkbox name="agree" required error={$errors.agree}>
 				<svelte:fragment slot="label">
 					I am above 18 years of age, and accept the
 					<a href="/" class="underline" target="blank">Terms & Conditions</a>

@@ -18,7 +18,7 @@
 
 <script lang="ts">
 	import { z } from 'zod';
-	import { modalStore } from '@skeletonlabs/skeleton';
+	import { modalStore, ProgressRadial } from '@skeletonlabs/skeleton';
 	import Recaptcha from '@/components/core/Recaptcha.svelte';
 	import { createForm } from 'felte';
 	import { validator } from '@felte/validator-zod';
@@ -28,15 +28,30 @@
 	import _ from 'lodash';
 	import Checkbox from '@/components/core/Checkbox.svelte';
 	import { reporter, ValidationMessage } from '@felte/reporter-svelte';
+	import { login, type AuthResponse } from '@/api/auth';
+	import { getContext } from 'svelte';
+	import type { Writable } from 'svelte/store';
+	import { CTX_STORE } from '@/utils/constants/key';
 
-	const { form, errors, isValid } = createForm<LoginSchemaType>({
+	const authStore = getContext<Writable<AuthResponse>>(CTX_STORE.AUTH);
+
+	let recaptchaRef: Recaptcha;
+	const { form, errors, isSubmitting, isValid } = createForm<LoginSchemaType>({
 		extend: [validator({ schema: loginSchema, level: 'error' }), reporter],
-		onSubmit: (data) => {
-			console.log(data);
+		onSubmit: async (body) => {
+			const data = await login(body);
+			authStore.set(data);
+			modalStore.close();
+		},
+		onError: async (err: any, ctx) => {
+			await recaptchaRef.reset();
+			switch (err.code) {
+				case '3':
+					ctx.setErrors('username', 'Your email or username was not found.');
+					break;
+			}
 		},
 	});
-
-	$: console.log($errors);
 
 	const onRegister = () => {
 		modalStore.close();
@@ -46,14 +61,9 @@
 
 {#if $modalStore[0]?.component === 'login'}
 	<div class="card flex flex-col gap-4 p-10 w-modal">
-		<h2 class="h2 font-bold text-center">Login</h2>
-		<form use:form novalidate class="flex flex-col gap-4">
-			<TextField
-				label="Email or Username"
-				required
-				name="username"
-				error={$errors.username !== null}
-			>
+		<h2 class="h2 text-2xl font-bold">Login</h2>
+		<form use:form novalidate autocapitalize="off" class="flex flex-col gap-4">
+			<TextField label="Email or Username" required name="username" error={$errors.username}>
 				<svelte:fragment slot="helpertext">
 					<ValidationMessage for="username" let:messages>
 						{#if messages}
@@ -63,13 +73,7 @@
 				</svelte:fragment>
 			</TextField>
 
-			<TextField
-				label="Password"
-				required
-				type="password"
-				name="password"
-				error={$errors.password !== null}
-			>
+			<TextField label="Password" required type="password" name="password" error={$errors.password}>
 				<svelte:fragment slot="helpertext">
 					<ValidationMessage for="password" let:messages>
 						{#if messages}
@@ -79,7 +83,7 @@
 				</svelte:fragment>
 			</TextField>
 
-			<Checkbox name="agree" slotLabel="items-center" required error={$errors.agree !== null}>
+			<Checkbox name="agree" slotLabel="items-center" required error={$errors.agree}>
 				<svelte:fragment slot="label">
 					I am above 18 years of age, and accept the
 					<a href="/" class="underline" target="blank">Terms & Conditions</a>
@@ -101,14 +105,21 @@
 				Forgot password?
 			</div>
 
-			<Recaptcha name="recaptcha" />
+			<Recaptcha bind:this={recaptchaRef} name="recaptcha" />
 
 			<button
-				disabled={!$isValid}
+				disabled={!$isValid || $isSubmitting}
 				tabindex="0"
 				type="submit"
-				class="btn variant-filled-primary w-full">Login</button
+				class="btn variant-filled-primary w-full"
 			>
+				{#if $isSubmitting}
+					<span>
+						<ProgressRadial width="w-4" meter="stroke-bg-1" track="stroke-bg-1/30" />
+					</span>
+				{/if}
+				<span>Login</span>
+			</button>
 		</form>
 
 		<Divider>

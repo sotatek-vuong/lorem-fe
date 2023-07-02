@@ -1,5 +1,11 @@
-<script>
+<script lang="ts">
+	import type { AuthResponse } from '@/api/auth';
+	import { CTX_STORE } from '@/utils/constants/key';
 	import { AppBar, modalStore } from '@skeletonlabs/skeleton';
+	import { getContext } from 'svelte';
+	import type { Writable } from 'svelte/store';
+
+	const auth = getContext<Writable<AuthResponse>>(CTX_STORE.AUTH);
 
 	const onLogin = () => {
 		modalStore.trigger({
@@ -24,15 +30,19 @@
 	slotTrail="flex-wrap"
 >
 	<svelte:fragment slot="lead">
-		<a href="/" class="h2 border-border text-main font-medium">Lorem</a>
+		<a href="/" class="h2 text-xl border-border text-main font-medium">Lorem</a>
 	</svelte:fragment>
 
 	<svelte:fragment slot="trail">
-		<button type="button" class="btn btn-sm hover:variant-soft-surface" on:click={onLogin}
-			>Login</button
-		>
-		<button type="button" class="btn btn-sm variant-filled-primary" on:click={onRegister}
-			>Register</button
-		>
+		{#if $auth?.user}
+			{$auth.user?.username}
+		{:else}
+			<button type="button" class="btn btn-sm hover:variant-soft-surface" on:click={onLogin}
+				>Login</button
+			>
+			<button type="button" class="btn btn-sm variant-filled-primary" on:click={onRegister}
+				>Register</button
+			>
+		{/if}
 	</svelte:fragment>
 </AppBar>

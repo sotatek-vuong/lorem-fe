@@ -5,7 +5,7 @@
 	export let label: string = '';
 	export let required: boolean = false;
 	export let type = 'text';
-	export let error: boolean = false;
+	export let error: any = false;
 
 	const showToggle = type === 'password';
 
