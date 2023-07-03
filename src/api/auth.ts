@@ -1,5 +1,5 @@
-import type { RegisterSchemaType } from '@/components/modules/auth/Register/index.svelte';
-import type { LoginSchemaType } from '@/components/modules/auth/Login/index.svelte';
+import type { RegisterSchemaType } from '@/components/modules/auth/Register.svelte';
+import type { LoginSchemaType } from '@/components/modules/auth/Login.svelte';
 import { request } from '@/utils/request';
 import Cookies from 'js-cookie';
 import { JWT_STORE_KEY } from '@/utils/constants/key';

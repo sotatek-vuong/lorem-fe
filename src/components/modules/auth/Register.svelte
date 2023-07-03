@@ -40,7 +40,7 @@
 	import Recaptcha from '@/components/core/Recaptcha.svelte';
 	import _ from 'lodash';
 	import Divider from '@/components/core/Divider.svelte';
-	import SocialMedia from '../SocialMedia.svelte';
+	import SocialMedia from './SocialMedia.svelte';
 	import { register, type AuthResponse } from '@/api/auth';
 	import { reporter, ValidationMessage } from '@felte/reporter-svelte';
 	import { CTX_STORE } from '@/utils/constants/key';

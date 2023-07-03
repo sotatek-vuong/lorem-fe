@@ -56,5 +56,16 @@
 	</script>
 </svelte:head>
 
-<input use:field {...$$restProps} class="hidden" />
-<div bind:this={placeholder} class="g-recaptcha" />
+<div>
+	<input use:field {...$$restProps} class="hidden" />
+	<div bind:this={placeholder} class="g-recaptcha" />
+</div>
+
+<style>
+	.g-recaptcha {
+		/* transform: scale(0.77);
+		-webkit-transform: scale(0.77);
+		transform-origin: 0 0;
+		-webkit-transform-origin: 0 0; */
+	}
+</style>
