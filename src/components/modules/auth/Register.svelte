@@ -31,7 +31,6 @@
 </script>
 
 <script lang="ts">
-	import { ProgressRadial, modalStore } from '@skeletonlabs/skeleton';
 	import TextField from '@/components/core/TextField.svelte';
 	import { createForm } from 'felte';
 	import { validator } from '@felte/validator-zod';
@@ -63,7 +62,6 @@
 		onSubmit: async (body) => {
 			const data = await register(body);
 			authStore.set(data);
-			modalStore.close();
 		},
 		onError: async (err: any, ctx) => {
 			await recaptchaRef.reset();
@@ -79,121 +77,114 @@
 		},
 	});
 
-	const openLogin = () => {
-		modalStore.close();
-		modalStore.trigger({ type: 'component', component: 'login' });
-	};
+	const openLogin = () => {};
 </script>
 
-{#if $modalStore[0]?.component === 'register'}
-	<div class="card p-10 w-modal">
-		<h2 class="h2 text-2xl mb-2 font-bold">Register to Play</h2>
-		<p class="text-content-2">
-			Already a user?
-			<button
-				on:click={openLogin}
-				class="no-underline hover:underline cursor-pointer self-start text-main">Login here</button
-			>
-		</p>
-		<form use:form novalidate autocapitalize="off" class="flex flex-col gap-6 mt-6">
-			<TextField label="Username" required name="username" error={$errors.username}>
-				<svelte:fragment slot="helpertext">
-					<p class="text-content-2 mb-1 text-xs leading-[13px]">
-						Lowercase letters and numbers only
-					</p>
-					<ValidationMessage for="username" let:messages>
-						{#if messages}
-							<ul class="list-disc list-inside marker:mr-1">
-								Username must be:
-								{#each messages as err}
-									<li>{err}</li>
-								{/each}
-							</ul>
-						{/if}
-					</ValidationMessage>
-				</svelte:fragment>
-			</TextField>
+<div class="card p-10 w-modal">
+	<h2 class="h2 text-2xl mb-2 font-bold">Register to Play</h2>
+	<p class="text-content-2">
+		Already a user?
+		<button
+			on:click={openLogin}
+			class="no-underline hover:underline cursor-pointer self-start text-main">Login here</button
+		>
+	</p>
+	<form use:form novalidate autocapitalize="off" class="flex flex-col gap-6 mt-6">
+		<TextField label="Username" required name="username" error={$errors.username}>
+			<svelte:fragment slot="helpertext">
+				<p class="text-content-2 mb-1 text-xs leading-[13px]">Lowercase letters and numbers only</p>
+				<ValidationMessage for="username" let:messages>
+					{#if messages}
+						<ul class="list-disc list-inside marker:mr-1">
+							Username must be:
+							{#each messages as err}
+								<li>{err}</li>
+							{/each}
+						</ul>
+					{/if}
+				</ValidationMessage>
+			</svelte:fragment>
+		</TextField>
 
-			<TextField label="Email" required name="email" type="email" error={$errors.email}>
-				<svelte:fragment slot="helpertext">
-					<ValidationMessage for="email" let:messages>
-						{#if messages}
-							{messages[0]}
-						{/if}
-					</ValidationMessage>
-				</svelte:fragment>
-			</TextField>
+		<TextField label="Email" required name="email" type="email" error={$errors.email}>
+			<svelte:fragment slot="helpertext">
+				<ValidationMessage for="email" let:messages>
+					{#if messages}
+						{messages[0]}
+					{/if}
+				</ValidationMessage>
+			</svelte:fragment>
+		</TextField>
 
-			<TextField label="Password" required name="password" type="password" error={$errors.password}>
-				<svelte:fragment slot="helpertext">
-					<p class="text-content-2 mb-1 text-xs leading-[13px]">
-						Use 8 or more characters with at least 1 uppercase, numbers & symbols.
-					</p>
-					<ValidationMessage for="password" let:messages>
-						{#if messages}
-							<ul class="list-disc list-inside marker:mr-1">
-								Password must contain:
-								{#each messages as err}
-									<li>{err}</li>
-								{/each}
-							</ul>
-						{/if}
-					</ValidationMessage>
-				</svelte:fragment>
-			</TextField>
+		<TextField label="Password" required name="password" type="password" error={$errors.password}>
+			<svelte:fragment slot="helpertext">
+				<p class="text-content-2 mb-1 text-xs leading-[13px]">
+					Use 8 or more characters with at least 1 uppercase, numbers & symbols.
+				</p>
+				<ValidationMessage for="password" let:messages>
+					{#if messages}
+						<ul class="list-disc list-inside marker:mr-1">
+							Password must contain:
+							{#each messages as err}
+								<li>{err}</li>
+							{/each}
+						</ul>
+					{/if}
+				</ValidationMessage>
+			</svelte:fragment>
+		</TextField>
 
-			<TextField
-				label="Confirm Password"
-				required
-				name="confirmPw"
-				type="password"
-				error={$errors.confirmPw}
-			>
-				<svelte:fragment slot="helpertext">
-					<ValidationMessage for="confirmPw" let:messages>
-						{#if messages}
-							{messages[0]}
-						{/if}
-					</ValidationMessage>
-				</svelte:fragment>
-			</TextField>
+		<TextField
+			label="Confirm Password"
+			required
+			name="confirmPw"
+			type="password"
+			error={$errors.confirmPw}
+		>
+			<svelte:fragment slot="helpertext">
+				<ValidationMessage for="confirmPw" let:messages>
+					{#if messages}
+						{messages[0]}
+					{/if}
+				</ValidationMessage>
+			</svelte:fragment>
+		</TextField>
 
-			<Checkbox name="agree" required error={$errors.agree}>
-				<svelte:fragment slot="label">
-					I am above 18 years of age, and accept the
-					<a href="/" class="underline" target="blank">Terms & Conditions</a>
-				</svelte:fragment>
-				<svelte:fragment slot="helpertext">
-					<ValidationMessage for="agree" let:messages>
-						{#if messages}
-							{messages[0]}
-						{/if}
-					</ValidationMessage>
-				</svelte:fragment>
-			</Checkbox>
+		<Checkbox name="agree" required error={$errors.agree}>
+			<svelte:fragment slot="label">
+				I am above 18 years of age, and accept the
+				<a href="/" class="underline" target="blank">Terms & Conditions</a>
+			</svelte:fragment>
+			<svelte:fragment slot="helpertext">
+				<ValidationMessage for="agree" let:messages>
+					{#if messages}
+						{messages[0]}
+					{/if}
+				</ValidationMessage>
+			</svelte:fragment>
+		</Checkbox>
 
-			<Recaptcha bind:this={recaptchaRef} name="recaptcha" />
+		<Recaptcha bind:this={recaptchaRef} name="recaptcha" />
 
-			<button
-				disabled={!$isValid || $isSubmitting}
-				type="submit"
-				class="btn variant-filled-primary w-full"
-			>
-				{#if $isSubmitting}
-					<span>
-						<ProgressRadial width="w-4" meter="stroke-bg-1" track="stroke-bg-1/30" />
-					</span>
-				{/if}
-				<span>Register Now</span>
-			</button>
-		</form>
+		<button
+			disabled={!$isValid || $isSubmitting}
+			type="submit"
+			class="btn variant-filled-primary w-full"
+		>
+			{#if $isSubmitting}
+				<span>
+					<ProgressRadial width="w-4" meter="stroke-bg-1" track="stroke-bg-1/30" />
+				</span>
+			{/if}
+			<span>Register Now</span>
+		</button>
+	</form>
 
-		<Divider slotRoot="my-4">
-			<span class="flex-shrink mx-4 font-bold text-content-2">OR</span>
-		</Divider>
+	<Divider slotRoot="my-4">
+		<span class="flex-shrink mx-4 font-bold text-content-2">OR</span>
+	</Divider>
 
-		<SocialMedia />
+	<SocialMedia />
 
-		<slot />
-	</div>
-{/if}
+	<slot />
+</div>

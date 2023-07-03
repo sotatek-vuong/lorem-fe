@@ -1,12 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-	// 1. Apply the dark mode class setting:
-	darkMode: 'class',
-	content: [
-		'./src/**/*.{html,js,svelte,ts}',
-		// 2. Append the path for the Skeleton NPM package and files:
-		require('path').join(require.resolve('@skeletonlabs/skeleton'), '../**/*.{html,js,svelte,ts}'),
-	],
+	content: ['./src/**/*.{svelte,js,ts}'],
 	theme: {
 		extend: {
 			colors: {
@@ -15,7 +9,7 @@ module.exports = {
 					error: '#da4545',
 					success: '#10a342',
 				},
-				border: '#383c43',
+				divider: '#383c43',
 				bg: {
 					1: '#151515',
 					2: '#202020',
@@ -30,10 +24,19 @@ module.exports = {
 			},
 		},
 	},
-	plugins: [
-		require('@tailwindcss/forms'),
-		require('tailwindcss/nesting'),
-		// 3. Append the Skeleton plugin to the end of this list
-		...require('@skeletonlabs/skeleton/tailwind/skeleton.cjs')(),
-	],
+	daisyui: {
+		themes: [
+			{
+				lorem: {
+					primary: '#ffd610',
+					neutral: '#202020',
+					'base-100': '#151515',
+					success: '#10a342',
+					error: '#da4545',
+				},
+			},
+		],
+		darkTheme: true,
+	},
+	plugins: [require('@tailwindcss/forms'), require('tailwindcss/nesting'), require('daisyui')],
 };

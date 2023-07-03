@@ -18,7 +18,6 @@
 
 <script lang="ts">
 	import { z } from 'zod';
-	import { modalStore, ProgressRadial } from '@skeletonlabs/skeleton';
 	import Recaptcha from '@/components/core/Recaptcha.svelte';
 	import { createForm } from 'felte';
 	import { validator } from '@felte/validator-zod';
@@ -41,7 +40,7 @@
 		onSubmit: async (body) => {
 			const data = await login(body);
 			authStore.set(data);
-			modalStore.close();
+			// modalStore.close();
 		},
 		onError: async (err: any, ctx) => {
 			await recaptchaRef.reset();
@@ -54,90 +53,93 @@
 	});
 
 	const onRegister = () => {
-		modalStore.close();
-		modalStore.trigger({ type: 'component', component: 'register' });
+		// modalStore.close();
+		// modalStore.trigger({ type: 'component', component: 'register' });
 	};
 </script>
 
-{#if $modalStore[0]?.component === 'login'}
-	<div class="card flex flex-col gap-4 p-10 w-modal">
-		<h2 class="h2 text-2xl font-bold">Login</h2>
-		<form use:form novalidate autocapitalize="off" class="flex flex-col gap-4">
-			<TextField label="Email or Username" required name="username" error={$errors.username}>
-				<svelte:fragment slot="helpertext">
-					<ValidationMessage for="username" let:messages>
-						{#if messages}
-							{messages[0]}
-						{/if}
-					</ValidationMessage>
-				</svelte:fragment>
-			</TextField>
+<!-- <dialog id="login" open class="modal"> -->
+<div class="modal-box flex flex-col gap-4 p-10">
+	<h2 class="text-2xl font-bold">Login</h2>
+	<form use:form novalidate autocapitalize="off" class="flex flex-col gap-4">
+		<TextField label="Email or Username" required name="username" error={$errors.username}>
+			<svelte:fragment slot="helpertext">
+				<ValidationMessage for="username" let:messages>
+					{#if messages}
+						{messages[0]}
+					{/if}
+				</ValidationMessage>
+			</svelte:fragment>
+		</TextField>
 
-			<TextField label="Password" required type="password" name="password" error={$errors.password}>
-				<svelte:fragment slot="helpertext">
-					<ValidationMessage for="password" let:messages>
-						{#if messages}
-							{messages[0]}
-						{/if}
-					</ValidationMessage>
-				</svelte:fragment>
-			</TextField>
+		<TextField label="Password" required type="password" name="password" error={$errors.password}>
+			<svelte:fragment slot="helpertext">
+				<ValidationMessage for="password" let:messages>
+					{#if messages}
+						{messages[0]}
+					{/if}
+				</ValidationMessage>
+			</svelte:fragment>
+		</TextField>
 
-			<Checkbox name="agree" slotLabel="items-center" required error={$errors.agree}>
-				<svelte:fragment slot="label">
-					I am above 18 years of age, and accept the
-					<a href="/" class="underline" target="blank">Terms & Conditions</a>
-				</svelte:fragment>
-				<svelte:fragment slot="helpertext">
-					<ValidationMessage for="agree" let:messages>
-						{#if messages}
-							{messages[0]}
-						{/if}
-					</ValidationMessage>
-				</svelte:fragment>
-			</Checkbox>
+		<Checkbox name="agree" slotLabel="items-center" required error={$errors.agree}>
+			<svelte:fragment slot="label">
+				I am above 18 years of age, and accept the
+				<a href="/" class="underline" target="blank">Terms & Conditions</a>
+			</svelte:fragment>
+			<svelte:fragment slot="helpertext">
+				<ValidationMessage for="agree" let:messages>
+					{#if messages}
+						{messages[0]}
+					{/if}
+				</ValidationMessage>
+			</svelte:fragment>
+		</Checkbox>
 
-			<div
-				tabindex="0"
-				class="no-underline hover:underline cursor-pointer self-start text-main"
-				role="button"
-			>
-				Forgot password?
-			</div>
+		<div
+			tabindex="0"
+			class="no-underline hover:underline cursor-pointer self-start text-main"
+			role="button"
+		>
+			Forgot password?
+		</div>
 
-			<Recaptcha bind:this={recaptchaRef} name="recaptcha" />
+		<Recaptcha bind:this={recaptchaRef} name="recaptcha" />
 
-			<button
-				disabled={!$isValid || $isSubmitting}
-				tabindex="0"
-				type="submit"
-				class="btn variant-filled-primary w-full"
-			>
-				{#if $isSubmitting}
-					<span>
-						<ProgressRadial width="w-4" meter="stroke-bg-1" track="stroke-bg-1/30" />
-					</span>
-				{/if}
-				<span>Login</span>
-			</button>
-		</form>
+		<button
+			disabled={!$isValid || $isSubmitting}
+			tabindex="0"
+			type="submit"
+			class="btn variant-filled-primary w-full"
+		>
+			{#if $isSubmitting}
+				<span>
+					<!-- <ProgressRadial width="w-4" meter="stroke-bg-1" track="stroke-bg-1/30" /> -->
+				</span>
+			{/if}
+			<span>Login</span>
+		</button>
+	</form>
 
-		<Divider>
-			<span class="flex-shrink mx-4 font-bold text-content-2">OR</span>
-		</Divider>
+	<Divider>
+		<span class="flex-shrink mx-4 font-bold text-content-2">OR</span>
+	</Divider>
 
-		<SocialMedia />
+	<SocialMedia />
 
-		<p class="text-center">
-			New to Lorem?
-			<button
-				tabindex="0"
-				on:click={onRegister}
-				class="no-underline hover:underline cursor-pointer self-start text-main"
-			>
-				Register here
-			</button>
-		</p>
-		<slot />
-	</div>
-{/if}
+	<p class="text-center">
+		New to Lorem?
+		<button
+			tabindex="0"
+			on:click={onRegister}
+			class="no-underline hover:underline cursor-pointer self-start text-main"
+		>
+			Register here
+		</button>
+	</p>
+	<slot />
+</div>
+<form method="dialog" class="modal-backdrop">
+	<button>close</button>
+</form>
+<!-- </dialog> -->

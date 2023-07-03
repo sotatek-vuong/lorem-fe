@@ -1,13 +1,6 @@
 <script lang="ts">
-	// Your selected Skeleton theme:
-	import '@skeletonlabs/skeleton/themes/theme-skeleton.css';
-
-	// This contains the bulk of Skeletons required styles:
-	// NOTE: this will be renamed skeleton.css in the v2.x release.
-	import '@skeletonlabs/skeleton/styles/skeleton.css';
 	import '../app.postcss';
 
-	import { AppShell, Modal } from '@skeletonlabs/skeleton';
 	import Header from '@/components/modules/Header.svelte';
 	import Login from '@/components/modules/auth/Login.svelte';
 	import Register from '@/components/modules/auth/Register.svelte';
@@ -45,18 +38,15 @@
 	<script src="https://accounts.google.com/gsi/client"></script>
 	<script src="https://connect.facebook.net/en_US/sdk.js"></script>
 </svelte:head> -->
-<AppShell>
-	<svelte:fragment slot="header">
-		<Header />
-	</svelte:fragment>
+<nav class="border-b border-divider">
+	<Header />
+</nav>
 
-	<div class="container mx-auto px-4">
-		<slot />
-	</div>
+<div class="container mx-auto px-4 flex-1">
+	<slot />
+</div>
 
-	<svelte:fragment slot="pageFooter">
-		<hr />
-		Footer
-	</svelte:fragment>
-	<Modal components={{ login: { ref: Login }, register: { ref: Register } }} />
-</AppShell>
+<hr />
+Footer
+
+<Login />
