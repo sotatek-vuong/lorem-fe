@@ -5,7 +5,7 @@
 html,
 body {
 	@apply h-full overflow-hidden;
-	line-height: 5/4;
+	line-height: 1.25;
 	font-size: 0.875rem;
 }
 
@@ -190,5 +190,12 @@ body {
 		& button {
 			@apply p-3 w-10 h-10;
 		}
+	}
+	.modal-backdrop {
+		@apply overflow-y-auto;
+	}
+	.modal-transition {
+		@apply min-h-full;
+		@apply h-fit;
 	}
 }

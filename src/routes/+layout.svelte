@@ -9,10 +9,9 @@
 
 	import { AppShell, Modal } from '@skeletonlabs/skeleton';
 	import Header from '@/components/modules/Header.svelte';
-	import Login from '@/components/modules/auth/Login/index.svelte';
-	import Register from '@/components/modules/auth/Register/index.svelte';
+	import Login from '@/components/modules/auth/Login.svelte';
+	import Register from '@/components/modules/auth/Register.svelte';
 	import { writable } from 'svelte/store';
-	import type { AuthResponse } from '@/api/auth';
 	import type { LayoutData } from './$types';
 	import { setContext } from 'svelte';
 	import { CTX_STORE } from '@/utils/constants/key';
@@ -59,5 +58,5 @@
 		<hr />
 		Footer
 	</svelte:fragment>
-	<Modal components={{ login: { ref: Login }, register: { ref: Register } }} />
 </AppShell>
+<Modal components={{ login: { ref: Login }, register: { ref: Register } }} />
