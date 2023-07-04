@@ -1,28 +1,28 @@
 <script lang="ts">
 	import type { AuthResponse } from '@/api/auth';
 	import { CTX_STORE } from '@/utils/constants/key';
-	import { AppBar, modalStore } from '@skeletonlabs/skeleton';
+	// import { AppBar, modalStore } from '@skeletonlabs/skeleton';
 	import { getContext } from 'svelte';
 	import type { Writable } from 'svelte/store';
 
 	const auth = getContext<Writable<AuthResponse>>(CTX_STORE.AUTH);
 
 	const onLogin = () => {
-		modalStore.trigger({
-			type: 'component',
-			component: 'login',
-		});
+		// modalStore.trigger({
+		// 	type: 'component',
+		// 	component: 'login',
+		// });
 	};
 
 	const onRegister = () => {
-		modalStore.trigger({
-			type: 'component',
-			component: 'register',
-		});
+		// modalStore.trigger({
+		// 	type: 'component',
+		// 	component: 'register',
+		// });
 	};
 </script>
 
-<AppBar
+<!-- <AppBar
 	background="bg-surface-900"
 	border="border-b border-border"
 	padding="p-0"
@@ -45,4 +45,4 @@
 			>
 		{/if}
 	</svelte:fragment>
-</AppBar>
+</AppBar> -->
